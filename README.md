@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cravey Web
 
-## Getting Started
+Cravey Web is a Next.js app for cannabis cessation tracking, inspired by the iOS Cravey app.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router, TypeScript)
+- Tailwind + shadcn-style UI primitives
+- Neon serverless Postgres (`@neondatabase/serverless`)
+- NextAuth magic-link auth (email provider + Resend send function)
+- Recharts for dashboard visuals
+- jsPDF for patient-facing PDF export
+
+## Implemented (Phase 1 baseline)
+
+- Magic-link login at `/login` with protected routes
+- Dashboard at `/dashboard` with streak, weekly summary, and charts
+- Craving log at `/log/craving`
+- Usage log at `/log/usage`
+- Combined history feed at `/history` with type filter + pagination
+- Settings at `/settings` with export + delete-all-data
+- Export page at `/settings/export` (JSON, CSV, PDF)
+
+## Environment Variables
+
+Create `.env.local` with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+DATABASE_URL=
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+RESEND_API_KEY=
+EMAIL_FROM=
+BLOB_READ_WRITE_TOKEN=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Database Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Apply SQL in `db/migrations/001_init.sql` to your Neon database.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run Locally
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Quality Checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Lint: `npm run lint`
+- Unit tests: `npm run test`
+- Build: `npm run build`
+- Full check (lint + tests + build): `npm run check`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Unit Testing
 
-## Deploy on Vercel
+Vitest is configured via `vitest.config.ts`. Current tests cover:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Export utilities (`tests/export-utils.test.ts`)
+- Validation schemas (`tests/validation.test.ts`)
+- Domain constants (`tests/schema.test.ts`)
